@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/my.js"></script>
+    <script src="/static/js/user/info.js"></script>
+
+    <style>
+        .imgDiv{
+            width: 180px;
+            height: 180px;
+        }
+
+        .act::after {
+            content: ''; 
+            position: absolute;
+            left: 0px;
+            bottom: 0;
+            right: 0;
+            margin:auto;
+            width: 37px;
+            height: 3PX;
+            background-color: #c5464a;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbra navbar-default" role="navigation">
+
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button class="navbar-toggle" data-toggle="collapse" data-target="#example-navbar-collapse">
+                <span class="sr-only">切换导航</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="/index" class="navbar-brand">LIUAN</a>
+
+    </div>
+    <div class="collapse navbar-collapse" id="example-navbar-collapse">
+
+        <ul class="nav navbar-nav" style="float:right">
+            <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="/index">首页</a></li>
+            <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="#">景点</a></li>
+            <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="/strategy">旅游攻略</a></li>
+            <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="#">酒店预定</a></li>
+            <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="#">关于我们</a></li>
+            <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="#">社区</a></li>
+            <li id="gif_login"><div style="width:58px;height:28px;text-align:center;margin-top:14px"><img src="/static/media/c_login1.gif"></div></li>
+            <li id='li_login' style="display: none;"><a href="/user/login" style="color:rgba(197, 46, 8, 0.808)">登录</a></li>
+            <li class="dropdown active" style="display: none;">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    我
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a id='user_profile' href="#">我的主页</a></li>
+                    <li><a id='my_strategy' href="#">我的文章</a></li>
+                    <li><a href="#">收藏</a></li>
+                    <li><a href="#">关注</a></li>
+                    <li class="divider"></li>
+                    <li onclick="logout()"><a href="/index">退出</a></li>
+                </ul>
+            </li>
+
+        </ul>
+    </div>
+    </div>
+</nav>
+    <div style="width: 60%; height: 800px;border: 1px solid red;margin: auto;" id='change_form'>
+        <div style="text-align:center"><h1>个人主页</h1></div>
+        <div>
+                <div class="imgDiv" style="margin: 40px 0px 0px 40px ;float: left;">
+                    <img id="avatar" width="100%" height="100%">
+                </div>
+                <div ><button onclick="change()" id='change_info' style="display:none;float:right;margin-right:71px ;" >编辑个人信息</button></div>
+                
+                <div style="margin:5px 0px 0px 40px;float: left;width: 70%;height: 200px;border: 1px solid rgb(94, 255, 0);">
+
+                     <p style="font-size: 20px;margin: 0px 0px 0px 10px; "><span >昵称:&nbsp;&nbsp;&nbsp; </span> <span id="nickname"></span></p><hr>
+                     <p style="font-size: 14px;margin: 10px 0px 0px 10px; "><span>关注：</span>0<span></span><span style="margin-left: 20px;">粉丝：</span><span>0</span></p>
+                     <p style="font-size: 14px;margin: 10px 0px 0px 10px; "><span>email:&nbsp;</span><span id="email"></span></p>
+                     <p style="font-size: 14px;margin: 10px 0px 0px 10px; "><span >简介: &nbsp;&nbsp;&nbsp; </span><span id="info"></span></p>
+                    </div>
+        </div>
+
+    </div>
+
+
+</body>
+</html>

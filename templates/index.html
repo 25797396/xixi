@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎~~O(∩_∩)O~~</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/css/index/index.css">
+    <link href="/static/css/index/hipster_cards.css" rel="stylesheet"/> 
+        
+    <!--     Fonts and icons     -->
+    <link href="/static/css/index/pe-icon-7-stroke.css" rel="stylesheet" />
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/my.js"></script>
+    <script src="/static/js/index.js"></script>
+</head>
+<body>
+    <nav class="navbra navbar-default" role="navigation"  style="background-color: rgba(255, 255, 255);">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button class="navbar-toggle" data-toggle="collapse" data-target="#example-navbar-collapse">
+                    <span class="sr-only">切换导航</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="/index" class="navbar-brand">LIUAN</a>
+
+            </div>
+            <div class="collapse navbar-collapse" id="example-navbar-collapse">
+
+                <ul class="nav navbar-nav" style="float:right">
+                    <li class="active act" onmouseover="ccc(this)"  onmouseout="ccc2(this)"><a href="/index">首页</a></li>
+                    <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"> <a href="#">景点</a></li>
+                    <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="/strategy">旅游攻略</a></li>
+                    <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="#">酒店预定</a></li>
+                    <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="#">关于我们</a></li>
+                    <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="#">社区</a></li>
+                    <li id="gif_login"><div style="width:58px;height:28px;text-align:center;margin-top:14px"><img src="/static/media/c_login1.gif"></div></li>
+                    <li id='li_login' style="display: none;"><a href="user/login" style="color:rgba(197, 46, 8, 0.808)">登录</a></li>
+                    <li class="dropdown" style="display: none; "  onmouseover="ccc(this)"   onmouseout="ccc2(this)">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            我
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a id='user_profile' href="#">我的主页</a></li>
+                            <li><a id='my_strategy' href="#">我的文章</a></li>
+                            <li><a href="#">收藏</a></li>
+                            <li><a href="#">关注</a></li>
+                            <li class="divider"></li>
+                              <li onclick="logout()"><a href="/index">退出</a></li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div id="silder">
+        <div id="imgs">
+            <img class="item active" style="width:100%;height:666px;" src="/static/media/lunbo/1.jpg" alt="">
+            <img class="item" style="width:100%;height:666px;" src="/static/media/lunbo/2.jpg" alt="">
+            <img class="item" style="width:100%;height:666px;" src="/static/media/lunbo/3.jpg" alt="">
+            <img class="item" style="width:100%;height:666px;" src="/static/media/lunbo/4.jpg" alt="">
+        </div>
+        <div class="cart">
+            <a id="pre_img"  style=" font-size: 2.65em;opacity: 0.5; "><i  style="color: #fff;" class="fa fa-chevron-left" aria-hidden="true"> </i></a>
+            <a id="next_img"  style=" font-size: 2.65em;opacity: 0.5; "><i  style="color: #fff;" class="fa fa-chevron-right" aria-hidden="true"> </i></a>
+        </div>
+
+        <div id="search_div">
+            <div class="search bar6">
+                <form id="ff">
+                    <input type="text" placeholder="搜索攻略、景点、酒店或用户" name="cname">
+                    <button type="submit"></button>
+                </form>
+        </div>
+        </div>
+        <ol class="carousel-indicators" style="opacity: 0.9;">
+            <li data-target="#myCarousel1" class="b_item active" data-slide-to="0"></li>
+            <li data-target="#myCarousel1" class="b_item" data-slide-to="1"></li>
+            <li data-target="#myCarousel1" class="b_item" data-slide-to="2"></li>
+            <li data-target="#myCarousel1" class="b_item" data-slide-to="3"></li>
+        </ol>
+    </div>
+    <div style="height: 150px;">
+            <div class="category" style="-webkit-transform:rotate(-9deg);width: 200px;">
+                    <h6 class="label label-danger"  style="width: 180px;font-size: 25px;height: 50px;margin-left: 70px;margin-top: 70px;">热门景点</h6>    
+                </div>
+    </div>
+    <div id="tuijian">
+            <div class="card-box col-md-4 col-sm-6" style="position: relative; left: 160px; top: 0px;width: 363px;">    
+                    <div class="card" data-background="image" data-src="/static/media/timg.jpeg" style="background-image: url(&quot;/static/media/timg.jpeg&quot;); background-position: center center; background-size: cover;height: 470px;">
+                        <div class="header">
+                            <div class="category">
+                                <h6 class="label label-danger">北京</h6>    
+                            </div>
+                        </div>
+                        
+                        <div class="content">
+                            <h4 class="title title-uppercase">
+                                <a href="">万里长城</a>
+                            </h4>
+                            <p class="description"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;万里长城自构筑的那天起，就成为中华民族大一统的象征，2000多年来，任何人都没有能从认识上割裂万里长城，因而也就无法割裂中华民族   。</p>
+                        </div>                            
+                        <div class="filter">
+                            
+                        </div>
+                    </div> <!-- end card -->                    
+            </div>
+            <div class="card-box col-md-4 col-sm-6" style="position: relative; left: 186px; top: 0px;width: 363px;">    
+                    <div class="card" data-background="image" data-src="/static/media/xian.jpg" style="background-image: url(&quot;/static/media/xian.jpg&quot;); background-position: center center; background-size: cover;height: 470px;">
+                        <div class="header">
+                            <div class="category">
+                                <h6 class="label label-danger">西安</h6>    
+                            </div>
+                        </div>
+                        
+                        <div class="content">
+                            <h4 class="title title-uppercase">
+                                <a href="">秦始皇陵兵马俑</a>
+                            </h4>
+                            <p class="description"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    西安周围帝王陵墓有72座，其中有“千古一帝”秦始皇的陵墓，
+                                    并且秦始皇兵马俑博物馆被誉为“世界第八大奇迹”，是当代最重要的考古发现之一。
+                                   
+                                    </p>
+                        </div>                            
+                        <div class="filter">
+                            
+                        </div>
+                    </div> <!-- end card -->                    
+            </div>
+            <div class="card-box col-md-4 col-sm-6" style="position: relative; left: 210px; top: 0px;width: 363px;">    
+                    <div class="card" data-background="image" data-src="/static/media/hanzhou.jpeg" style="background-image: url(&quot;/static/media/hanzhou.jpeg&quot;); background-position: center center; background-size: cover;height: 470px;">
+                        <div class="header">
+                            <div class="category">
+                                <h6 class="label label-danger">杭州</h6>    
+                            </div>
+                        </div>
+                        
+                        <div class="content">
+                            <h4 class="title title-uppercase">
+                                <a href="">西湖</a>
+                            </h4>
+                            <p class="description"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    西湖有100多处公园景点，包括三秋桂子、六桥烟柳、九里云松、十里荷花景观、
+                                    有“西湖十景”、“新西湖十景”、“三评西湖十景”之说，
+                                    有60多处国家、省、市级重点文物保护单位和20多座博物馆。</p>
+                        </div>                            
+                        <div class="filter">
+                            
+                        </div>
+                    </div> <!-- end card -->                    
+            </div>
+            <div class="card-box col-md-4 col-sm-6" style="position: relative; left: 236px; top: 0px;width: 363px;">    
+                    <div class="card" data-background="image" data-src="/static/media/xiz.jpeg" style="background-image: url(&quot;/static/media/xiz.jpeg&quot;); background-position: center center; background-size: cover;height: 470px;">
+                        <div class="header">
+                            <div class="category">
+                                <h6 class="label label-danger">拉萨</h6>    
+                            </div>
+                        </div>
+                        
+                        <div class="content">
+                            <h4 class="title title-uppercase">
+                                <a href="">布达拉宫</a>
+                            </h4>
+                            <p class="description"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    布达拉宫依山垒砌，群楼重叠，是藏式古建筑的杰出代表，
+                                    中华民族古建筑的精华之作  。
+                                    布达拉宫前辟有布达拉宫广场，是世界上海拔最高的城市广场。</p>
+                        </div>                            
+                        <div class="filter">
+                            
+                        </div>
+                    </div> <!-- end card -->                    
+            </div>
+
+    </div>
+    <div id="stuijian" >
+        
+    </div>
+    <div style="height:300px;width:100%;background-color: pink;">
+            
+    </div>
+<script src="/static/js/hipster-cards.js"></script>
+</body>
+</html>

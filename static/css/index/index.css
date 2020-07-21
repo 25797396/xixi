@@ -1,0 +1,170 @@
+
+        #silder{
+            width: 100%;
+            height: 666px;
+            position: relative;
+            overflow:hidden
+        }
+        /* 大图片 */
+        .item{
+            position: absolute;
+            z-index:1;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 0;
+            opacity: 0;
+            transition: all 2.0s;
+        }
+
+        #silder>#imgs>img.active{
+            opacity: 1;
+        }
+        /* 左右小按钮 */
+        #silder>.cart>a{
+            z-index:9;
+            position: absolute;
+            top:50%;
+            margin-top: -20px;
+        }
+        #pre_img{
+            left: 1rem;/*元素定位在左侧*/
+
+        }
+        #next_img{
+            right: 1rem;/*元素定位在右侧*/
+        }
+
+        #tuijian{
+            width:100%;
+            height: 600px;
+            /* border: 1px solid red; */
+        }
+
+        #jtuijian{
+            float: left;
+            width:20%;
+            height: 100%;
+            border: 1px solid green; 
+            text-align: center;
+        }
+
+        #stuijian{
+
+            width: 100%;
+            height: 1038px;
+            /* background-color: #eae7e7; */
+            /* border: 1px solid green; */
+        }
+
+        #search_div {
+            width:580px;
+            height:100px;
+            margin:499px auto;
+            box-sizing:border-box;
+            z-index: 9;
+            position: relative;
+        }
+        div.search {
+            padding:10px 0;
+            box-sizing:border-box;
+        }
+        #ff {
+            box-sizing:border-box;
+            position:relative;
+            width:570px;
+            margin:0 auto;
+        }
+        input,button {
+            border:none;
+            box-sizing:border-box;
+            outline:none;
+        }
+
+        .bar6 input {
+            /* border:2px solid #c5464a; */
+            box-sizing:border-box;
+            border-radius:5px;
+            background:transparent;
+            top:0;
+            right:0;
+            width:100%;
+            height:42px;
+            padding-left:13px;
+            background-color: white;
+            
+        }
+        .bar6 button {
+            background:#c5464a;
+            box-sizing:border-box;
+            border-radius:0 5px 5px 0;
+            width:120px;
+            height:42px;
+            top:0;
+            right:0;
+            cursor:pointer;
+            position:absolute;
+        }
+        .bar6 button:before {
+            content:"搜索";
+            box-sizing:border-box;
+            font-size:15px;
+            color:#F9F0DA;
+        }
+
+        .act::after {
+            content: ''; 
+            position: absolute;
+            left: 0px;
+            bottom: 0;
+            right: 0;
+            margin:auto;
+            width: 37px;
+            height: 3PX;
+            background-color: #c5464a;
+        }
+
+.xx{
+    height: 40px;
+    width: 152px;
+    color: white;
+    background-color:#FF3B30;
+}
+
+.xx:hover{
+    transform: scale(1.05,1.05);
+}
+
+.s_div1{
+    width: 60%;
+    height: 260px;
+    margin: auto;
+    background-color: #eae7e7;
+}
+
+.s_div2{
+    width: 100%;
+    height: 260px;
+    border-bottom: 1px solid white;
+}
+
+.s_div_img{
+    width: 260px;
+    height: 220px;
+    margin: 20px 0px 0px 20px;
+    float: left;
+    padding-right: 20px;
+}
+
+.s_div_content{
+    width: 91%;
+    height: 176px;
+    padding: 1px 0px 0px 20px;
+}
+
+.aaa{
+    color: white;
+}
+
+.aaa:hover{
+    color: white;
+}
