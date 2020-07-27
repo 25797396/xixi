@@ -1,3 +1,26 @@
+$(document).scroll(function() {
+           var scroH = $(document).scrollTop(); //滚动高度
+           var viewH = $(window).height(); //可见高度
+           var contentH = $(document).height(); //内容高度
+
+            if(scroH >50){ //距离顶部大于100px时
+
+                $('.navbra').addClass('navh')
+                $('.navbra').css('top',scroH)
+                $('.navbra').css('background-color','rgba(255,255,255,0.9)')
+
+            }else{
+                $('.navbra').removeClass('navh')
+            }
+            if (contentH - (scroH + viewH) <= 100){ //距离底部高度小于100px
+
+            }
+            if (contentH = (scroH + viewH)){ //滚动条滑到底部啦
+
+            }
+
+        });
+
 function check(){
     var t_token = window.localStorage.getItem('travel_token');
     var t_user = window.localStorage.getItem('travel_user');
@@ -44,3 +67,4 @@ function logout(){
 $(function(){
       is_login = check()
 })
+

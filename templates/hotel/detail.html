@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>酒店</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/my.js"></script>
+    <style>
+        .act::after {
+            content: '';
+            position: absolute;
+            left: 0px;
+            bottom: 0;
+            right: 0;
+            margin:auto;
+            width: 37px;
+            height: 3PX;
+            background-color: #c5464a;
+        }
+        .navh{
+            position:absolute;
+            width:100%;
+            z-index:10;
+        }
+    </style>
+    <script>
+        $(function(){
+            if($("input[name='h']:checked").length!=0){
+                $('#price').html(Number($("input[name='h']:checked").val())*129)
+            }
+            $('#pay').click(function(){
+                var day = $("input[name='h']:checked").val()
+                price = day*129
+                var token = window.localStorage.getItem('travel_token');
+                var username = window.localStorage.getItem('travel_user');
+                var timestamp = (new Date()).getTime();
+                order_id = timestamp+Math.ceil(Math.random()*100)
+                $.ajax({
+                    url: 'http://127.0.0.1:8000/hotel/order/'+username,
+                    type: 'post',
+                    data: JSON.stringify({"order_id":order_id,"hotel_name":"如家", "days":day, "price":129*Number(day)}),
+                    beforeSend: function(request) {
+                        request.setRequestHeader("Authorization", token);
+                    },
+                    success: function(data){
+                        if(data.code==200){
+                        window.location = data.pay_url
+                        }else{
+                            alert(data.error)
+                        }
+
+                    }
+                })
+
+            })
+
+        })
+
+        function ccc(obj){
+            $(obj).addClass('act')
+        }
+
+        function ccc2(obj){
+            if($(obj).children(":first").text()=='酒店预定'){
+                return
+            }
+            $(obj).removeClass('act')
+        }
+
+        function onC(obj){
+            if(obj.checked){
+                $('#price').html(Number(obj.value)*129)
+            }
+        }
+
+    </script>
+</head>
+<body>
+    <nav class="navbra navbar-default" role="navigation"  style="background-color: rgba(255, 255, 255,0.9);">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button class="navbar-toggle" data-toggle="collapse" data-target="#example-navbar-collapse">
+                    <span class="sr-only">切换导航</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="/index" class="navbar-brand">LIUAN</a>
+
+            </div>
+            <div class="collapse navbar-collapse" id="example-navbar-collapse">
+
+                <ul class="nav navbar-nav" style="float:right">
+                    <li onmouseover="ccc(this)"  onmouseout="ccc2(this)"><a href="/index">首页</a></li>
+                    <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"> <a href="#">景点</a></li>
+                    <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="/strategy">旅游攻略</a></li>
+                    <li class="active act" onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="/hotel/index">酒店预定</a></li>
+                    <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="#">关于我们</a></li>
+                    <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="#">社区</a></li>
+                    <li id="gif_login"><div style="width:58px;height:28px;text-align:center;margin-top:14px"><img src="/static/media/c_login1.gif"></div></li>
+                    <li id='li_login' style="display: none;"><a href="user/login" style="color:rgba(197, 46, 8, 0.808)">登录</a></li>
+                    <li class="dropdown" style="display: none; "  onmouseover="ccc(this)"   onmouseout="ccc2(this)">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            我
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a id='user_profile' href="#">我的主页</a></li>
+                            <li><a id='my_strategy' href="#">我的文章</a></li>
+                            <li><a href="#">收藏</a></li>
+                            <li><a href="#">关注</a></li>
+                            <li class="divider"></li>
+                              <li onclick="logout()"><a href="/index">退出</a></li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div style="width:50%;margin:0 auto">
+        <p>酒店名：xx酒店</p>
+
+        入住天数：<input type="radio" name="h" checked="checked" onclick="onC(this)" value="1">1天
+        <input type="radio" name="h" onclick="onC(this)" value="2">2天
+        <input type="radio" name="h" onclick="onC(this)" value="3">3天<br>
+        价格：<span id="price"></span><span>元</span><br>
+        <button id="pay">打钱</button>
+    </div>
+</body>
+</html>

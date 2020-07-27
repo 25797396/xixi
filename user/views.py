@@ -185,21 +185,31 @@ class UserInfo(View):
 
 # 搜索
 def search(request):
-    search_content = request.GET.get('search')
+    search_content = request.GET.get('search_content')
 
     data = {}
     # 用户
     users = User.objects.filter(username__icontains=search_content)
     if users:
+        u = []
         for user in users:
-            pass
+            username = user.username
+            avatar = str(user.avatar)
+            u.append({'username':username, 'avatar':avatar})
+        data['user'] = u
 
     # 攻略
     strategys = Strategy.objects.filter(Q(title__icontains=search_content)|Q(content__contains=search_content))
     if strategys:
+        s = []
         for strategy in strategys:
-            pass
+            title = strategy.title
+            introduce = strategy.introduce
+            create_time = strategy.create_time
 
+            s.append({'title':title, 'introduce':introduce, 'create_time':create_time})
+
+        data['strategys'] = s
     # 酒店
     hotels = Hotel.objects.filter(Q(name__icontains=search_content)|Q(position__contains=search_content))
     if hotels:

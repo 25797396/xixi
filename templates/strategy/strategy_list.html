@@ -39,6 +39,16 @@
 
         })
 
+        function ccc(obj){
+            $(obj).addClass('act')
+        }
+
+        function ccc2(obj){
+            if($(obj).children(":first").text()=='我'){
+                return
+            }
+            $(obj).removeClass('act')
+        }
     </script>
     <style>
         a{
@@ -49,6 +59,22 @@
         }
         ul li{
             list-style: none;
+        }
+        .navh{
+            position:absolute;
+            width:100%;
+            z-index:10;
+        }
+        .act::after {
+            content: '';
+            position: absolute;
+            left: 0px;
+            bottom: 0;
+            right: 0;
+            margin:auto;
+            width: 37px;
+            height: 3PX;
+            background-color: #c5464a;
         }
     </style>
 </head>
@@ -68,15 +94,15 @@
             <div class="collapse navbar-collapse" id="example-navbar-collapse">
 
                 <ul class="nav navbar-nav" style="float:right">
-                    <li><a href="/index">首页</a></li>
-                    <li><a href="#">景点</a></li>
-                    <li><a href="/strategy">旅游攻略</a></li>
-                    <li><a href="#">酒店预定</a></li>
-                    <li><a href="#">关于我们</a></li>
-                    <li><a href="#">社区</a></li>
+                    <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="/index">首页</a></li>
+                    <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="#">景点</a></li>
+                    <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="/strategy">旅游攻略</a></li>
+                    <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="/hotel/index">酒店预定</a></li>
+                    <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="#">关于我们</a></li>
+                    <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="#">社区</a></li>
                     <li id="gif_login"><div style="width:58px;height:28px;text-align:center;margin-top:14px"><img src="/static/media/c_login1.gif"></div></li>
                     <li id='li_login' style="display: none;"><a href="/user/login" style="color:rgba(197, 46, 8, 0.808)">登录</a></li>
-                    <li class="dropdown active" style="display: none;">
+                    <li class="dropdown active act" style="display: none;">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             我
                             <b class="caret"></b>

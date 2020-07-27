@@ -26,6 +26,11 @@
             height: 3PX;
             background-color: #c5464a;
         }
+        .navh{
+            position:absolute;
+            width:100%;
+            z-index:10;
+        }
     </style>
 </head>
 <body>
@@ -48,12 +53,12 @@
             <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="/index">首页</a></li>
             <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="#">景点</a></li>
             <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="/strategy">旅游攻略</a></li>
-            <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="#">酒店预定</a></li>
+            <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="/hotel/index">酒店预定</a></li>
             <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="#">关于我们</a></li>
             <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="#">社区</a></li>
             <li id="gif_login"><div style="width:58px;height:28px;text-align:center;margin-top:14px"><img src="/static/media/c_login1.gif"></div></li>
             <li id='li_login' style="display: none;"><a href="/user/login" style="color:rgba(197, 46, 8, 0.808)">登录</a></li>
-            <li class="dropdown active" style="display: none;">
+            <li class="dropdown active act" style="display: none;">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     我
                     <b class="caret"></b>
@@ -88,7 +93,7 @@
                      <p style="font-size: 14px;margin: 10px 0px 0px 10px; "><span >简介: &nbsp;&nbsp;&nbsp; </span><span id="info"></span></p>
                     </div>
         </div>
-
+        <div id="wenz" style="width:200px;margin:30px 0px 0px 300px"></div>
     </div>
 
 

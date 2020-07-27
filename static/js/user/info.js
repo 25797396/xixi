@@ -24,6 +24,8 @@ $(function(){
                 if(res.data.username == res.data.vistor){
                     $('#change_info').css("display","inline");
                     // $('#change_info').attr("href",'/user/change_info/'+res.data.username);
+                }else{
+                    $('#wenz').html('<a href="/strategy/'+res.data.username+'">攻略列表</a>')
                 }
             }else{
                 alert(res.error)

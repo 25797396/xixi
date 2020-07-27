@@ -191,3 +191,6 @@ function ccc2(obj){
     $(obj).removeClass('act')
 }
 
+function search(obj){
+    console.log('搜索')
+}
