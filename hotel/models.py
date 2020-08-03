@@ -5,10 +5,11 @@ from user.models import User
 
 # 酒店
 class Hotel(models.Model):
-    name = models.CharField('酒店名', max_length=20)
+    name = models.CharField('酒店名', max_length=50)
     cover_img = models.ImageField(upload_to='hotel', default=None)
     price = models.DecimalField('价格', decimal_places=2, max_digits=7)
-    position = models.CharField('位置', max_length=50)
+    position = models.CharField('位置', max_length=100)
+    cityname = models.CharField('城市', max_length=20)
     # province = models.ForeignKey(Province, on_delete=models.CASCADE, default=None)
     # city = models.ForeignKey(City, on_delete=models.CASCADE, default=None)
     # area = models.ForeignKey(Area, on_delete=models.CASCADE, default=None)

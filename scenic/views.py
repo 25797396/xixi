@@ -1,3 +1,6 @@
 from django.shortcuts import render
 
-# Create your views here.
+
+def get_scenic_detail_page(request, scenic_id):
+
+    return render(request, 'scenic/detail.html')

@@ -1,11 +1,16 @@
+from threading import Lock
 import time
 import jwt
+import redis
 from django.http import JsonResponse, HttpResponse
 import os
 from django.conf import settings
-from django.shortcuts import render
+from django.core.cache import cache
 from alipay import AliPay
+from .blfilter import PyBloomFilter
 
+
+lock = Lock()
 
 # 生成token
 def make_token(username, expire=3600*24):
@@ -69,10 +74,50 @@ def del_img(filepath):
     print('文件不存在,删除失败')
     return False
 
+# 攻略缓存
+def travel_cache(expire=60):
+    def _topic_cache(func):
+        def wrapper(request, *args, **kwargs):
+            s_id = request.GET.get('s_id')
+            print(request.get_full_path())
+            if s_id:
+                cache_key = 'travel_topic_cache_%s'%(request.get_full_path().replace('/strategy/strategy/',''))
+            else:
+                cache_key = 'travel_topic_cache_%s'%(request.get_full_path())
+
+            # 布隆过滤器
+            bf = PyBloomFilter()
+            # bf.add('travel_topic_cache_/strategy/strategy/user')
+            if not bf.is_exist(cache_key):
+                print('---布隆过滤器：数据不存在---')
+                return HttpResponse(404)
+            else:
+                print('---布隆过滤器:数据存在---')
+
+            res = cache.get(cache_key)      # 获取缓存
+            if res:
+                print('---返回缓存---')
+                return res
+            print('---无缓存，走数据库，并存缓存---')
+
+            if lock.acquire(False):  # 加锁
+                print('获得锁')
+                res = func(request, *args, **kwargs)
+                cache.set(cache_key, res, expire)
+                lock.release()
+            else:
+                print('已上锁,等待')
+                time.sleep(0.1)
+                return wrapper(request, *args, **kwargs)
+            return res
+
+        return wrapper
+
+    return _topic_cache
+
+# 支付宝支付
 app_private_key_string = open(settings.ALIPAY_KEY_DIR+'app_private_key.pem').read()
 alipay_public_key_string = open(settings.ALIPAY_KEY_DIR+'alipay_public_key.pem').read()
-
-
 class MyAliPay():
     # 定义支付相关方法
     def __init__(self, **kwargs):

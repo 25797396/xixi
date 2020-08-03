@@ -18,10 +18,12 @@ from django.urls import path,include
 from user import views
 
 urlpatterns = [
+    path(r'^api-auth/', include('rest_framework.urls')),
     path('admin/', admin.site.urls),
     path('user', include('user.urls')),
     path('strategy', include('strategy.urls')),
     path('hotel', include('hotel.urls')),
+    path('scenic', include('scenic.urls')),
     path('index', views.index),
     path('islogin', views.is_login),
     path('get_index_data', views.get_index_data),

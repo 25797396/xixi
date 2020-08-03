@@ -27,8 +27,9 @@ function close_reply(obj){
 function send_reply(obj){
     comment_id = $(obj).parent().parent().attr('id')
     content = $(obj).prev().val()
-    console.log(content)
-    if(content=" "){
+    s = content
+    console.log(s)
+    if(content.length==0){
         alert('请输入内容')
         return
     }
@@ -66,8 +67,8 @@ function send_reply(obj){
 
             r_html+='<div class="send_time" style="padding-top:38px"><p>'+res.data.reply_send_time
             //+'</p></div></div></div>'
-            r_html+='&nbsp;&nbsp;&nbsp;<a class="reply_touser"'
-            r_html+='onclick="send_reply_touser(this)">回复</a></p></div></div></div>'
+            r_html+='&nbsp;&nbsp;&nbsp;<span class="reply_touser"'
+            r_html+='onclick="send_reply_touser(this)">回复</span></p></div></div></div>'
             r.html(r_html)
             content = $(obj).prev().val("")
         }
@@ -105,6 +106,8 @@ $(function(){
                     $('#del_s').css('display','inline');
                 }
                 $('#title').html('<h1>'+res.data[0].title+'</h1>')
+                $('#usernameaa').attr('href','/user/info/'+res.author)
+                $('#usernameaa').text(res.author)
                 $('#content').html(res.data[0].content)
                 if(res.pre_strategy != ''){
                     $('#pre_s').text("上一篇："+res.pre_strategy.title)
@@ -142,7 +145,7 @@ $(function(){
                         c_count = '('+comments[i].c_count+')'
                     }
                     c_send_time =  '<div class="send_time"><p>'+comments[i].c_send_time+'&nbsp;&nbsp;&nbsp;'+
-                                                    '<a  class="open_reply" onclick="open_reply(this)"">回复'+c_count+'</a>'+
+                                                    '<span  class="open_reply" onclick="open_reply(this)">回复'+c_count+'</span>'+
                                                     '<span  class="close_reply"  onclick="close_reply(this)">收起回复</span></p></div>'
                     c_reply =  '<div class="reply" style="height:'+(comments[i].c_replys.length*120+'px')+'">'
                     for(let j=0; j<comments[i].c_replys.length;j++){
@@ -157,8 +160,8 @@ $(function(){
                         }
                         //r+='<div class="right_reply"><p>'+reply.r_content+'</p>'
                         r+='<div class="send_time" style="padding-top:38px"><p>'+reply.r_send_time
-                        r+='&nbsp;&nbsp;&nbsp;<a class="reply_touser"'
-                        r+='onclick="send_reply_touser(this)">回复</a></p></div></div></div>'
+                        r+='&nbsp;&nbsp;&nbsp;<span class="reply_touser"'
+                        r+='onclick="send_reply_touser(this)">回复</span></p></div></div></div>'
                         c_reply+=r
                     }
                     c_reply+= '</div>'
@@ -228,7 +231,7 @@ $(function(){
                     c_name =  '<p><a href="/user/info/'+res.data.username+'">'+res.data.username+'</a></p></div>'
                     c_left = c_avatar + c_name
                     c_content = '<div class="right_comment"><p>'+res.data.content+'</p></div>'
-                    c_send_time =  '<div class="send_time"><p>'+res.data.create_time+'&nbsp;&nbsp;&nbsp;<a href="#">回复</a></p></div>'
+                    c_send_time =  '<div class="send_time"><p>'+res.data.create_time+'&nbsp;&nbsp;&nbsp;<span class="open_reply" onclick="open_reply(this)">回复</span></p></div>'
                     c_right = c_content + c_send_time
                     html += '<div class="comment">'+c_left + c_right +'</div>'
                     // html +=''

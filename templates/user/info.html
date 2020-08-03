@@ -10,6 +10,9 @@
     <script src="/static/js/user/info.js"></script>
 
     <style>
+        ul li{
+            list-style: none;
+        }
         .imgDiv{
             width: 180px;
             height: 180px;
@@ -44,7 +47,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="/index" class="navbar-brand">LIUAN</a>
+            <a href="/index" class="navbar-brand">O(∩_∩)O~~</a>
 
     </div>
     <div class="collapse navbar-collapse" id="example-navbar-collapse">
@@ -52,7 +55,7 @@
         <ul class="nav navbar-nav" style="float:right">
             <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="/index">首页</a></li>
             <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="#">景点</a></li>
-            <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="/strategy">旅游攻略</a></li>
+            <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="/strategy/1">旅游攻略</a></li>
             <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="/hotel/index">酒店预定</a></li>
             <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="#">关于我们</a></li>
             <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="#">社区</a></li>
@@ -65,7 +68,7 @@
                 </a>
                 <ul class="dropdown-menu">
                     <li><a id='user_profile' href="#">我的主页</a></li>
-                    <li><a id='my_strategy' href="#">我的文章</a></li>
+                    <li><a id='my_strategy' href="#">我的游记</a></li>
                     <li><a href="#">收藏</a></li>
                     <li><a href="#">关注</a></li>
                     <li class="divider"></li>
@@ -77,23 +80,35 @@
     </div>
     </div>
 </nav>
-    <div style="width: 60%; height: 800px;border: 1px solid red;margin: auto;" id='change_form'>
-        <div style="text-align:center"><h1>个人主页</h1></div>
+    <div style="width: 60%;border: 1px solid red;margin: auto;max-height:1200px" id='change_form'>
+        <div style="text-align:center"><h1 id="profile1">个人主页</h1></div>
         <div>
                 <div class="imgDiv" style="margin: 40px 0px 0px 40px ;float: left;">
-                    <img id="avatar" width="100%" height="100%">
+                    <img id="avatar" width="100%" height="100%"><hr>
                 </div>
-                <div ><button onclick="change()" id='change_info' style="display:none;float:right;margin-right:71px ;" >编辑个人信息</button></div>
+                <div id="chccc"><button onclick="change()" id='change_info' style="display:none;float:right;margin-right:71px ;" >编辑个人信息</button></div>
                 
-                <div style="margin:5px 0px 0px 40px;float: left;width: 70%;height: 200px;border: 1px solid rgb(94, 255, 0);">
+                <div style="margin:5px 0px 0px 40px;float: left;width: 70%;height: 200px;">
 
-                     <p style="font-size: 20px;margin: 0px 0px 0px 10px; "><span >昵称:&nbsp;&nbsp;&nbsp; </span> <span id="nickname"></span></p><hr>
+                     <p style="font-size: 20px;margin: 0px 0px 0px 10px;"><span >昵称:&nbsp;&nbsp;&nbsp; </span> <span id="nickname"></span></p><hr>
                      <p style="font-size: 14px;margin: 10px 0px 0px 10px; "><span>关注：</span>0<span></span><span style="margin-left: 20px;">粉丝：</span><span>0</span></p>
                      <p style="font-size: 14px;margin: 10px 0px 0px 10px; "><span>email:&nbsp;</span><span id="email"></span></p>
                      <p style="font-size: 14px;margin: 10px 0px 0px 10px; "><span >简介: &nbsp;&nbsp;&nbsp; </span><span id="info"></span></p>
+
                     </div>
+
         </div>
-        <div id="wenz" style="width:200px;margin:30px 0px 0px 300px"></div>
+        <div id="wenz" style="width:100%;height:230px"></div>
+        <button onclick="change_password()" id='change_password' style="display:none;float:right;margin-right:71px ;" >修改密码</button>
+
+        <div id="wenzz" style="text-align:center;display:none">
+            <div id="strategy_div">
+                <span id="other_span"></span>
+                <ul id="strategy_ul">
+
+                </ul>
+            </div>
+        </div>
     </div>
 
 

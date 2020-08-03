@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'community',
     'hotel',
     'scenic',
@@ -108,6 +109,14 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+REST_FRAMEWORK = {
+    # 使用 Django 的标准 `django.contrib.auth` 权限，
+    # 或允许未经身份验证的用户进行只读访问。
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
@@ -155,3 +164,11 @@ ALIPAY_APP_ID = '2016102800773396'
 ALIPAY_KEY_DIR = os.path.join(BASE_DIR,'static/key_file/')
 ALIPAY_RETURN_URL = 'http://127.0.0.1:8000/hotel/result/'
 ALIPAY_NOTIFY_URL = 'http://127.0.0.1:8000/hotel/result/'
+
+# 邮件服务器配置
+EMAIL_HOST = 'smtp.qq.com'  # 如果是 163 改成 smtp.163.com
+EMAIL_PORT = 465
+EMAIL_HOST_USER = '2579739606@qq.com'  # 在这里填入您的QQ邮箱账号
+EMAIL_HOST_PASSWORD = 'hjnqwlifiwkvebhc'  # 请在这里填上您自己邮箱的授权码
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+EMAIL_USE_SSL = True

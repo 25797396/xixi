@@ -27,8 +27,19 @@
                         for(var i=0; i<res.data.length; i++){
                             id = res.data[i].id
                             title = res.data[i].title
+                            comment_count = res.data[i].comment_count
                             create_time = res.data[i].create_time
-                            html += '<a href="/strategy/'+username+'/detail?s_id='+id+'"><li><h1>标题：'+title+'</h1> 创建时间：'+create_time+'</li></a>'
+                            introduce = res.data[i].introduce
+                            browse_nums = res.data[i].browse_nums
+                            good = res.data[i].good
+                            html += '<li><div style="width:60%;margin:0 auto">'
+                            html += '<div style="text-align:right"><span>浏览数：</span><span>'+browse_nums+'</span>'
+                            html += '&nbsp&nbsp&nbsp<span>评论数：</span><span>'+comment_count+'</span>'
+                            html += '&nbsp&nbsp&nbsp<span>good：</span><span>'+good+'</span></div>'
+                            html += '<div style="text-align:left;padding:0px 50px 30px 50px">'
+                            html += '<a href="/strategy/'+username+'/detail?s_id='+id+'"><h2>'+title+'</h2><p style="color:black">'+introduce+'</p></a></div>'
+                            html += '<div style="text-align:right"><a href="/strategy/'+username+'/detail?s_id='+id+'">创建时间：'+create_time+'</span></a>'
+                            html += '<hr></div></li>'
                         }
                         $('#strategy_ul').html(html)
                     }
@@ -88,7 +99,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a href="/index" class="navbar-brand">LIUAN</a>
+                <a href="/index" class="navbar-brand">O(∩_∩)O~~</a>
 
             </div>
             <div class="collapse navbar-collapse" id="example-navbar-collapse">
@@ -96,7 +107,7 @@
                 <ul class="nav navbar-nav" style="float:right">
                     <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="/index">首页</a></li>
                     <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="#">景点</a></li>
-                    <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="/strategy">旅游攻略</a></li>
+                    <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="/strategy/1">旅游攻略</a></li>
                     <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="/hotel/index">酒店预定</a></li>
                     <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="#">关于我们</a></li>
                     <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="#">社区</a></li>
@@ -109,7 +120,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a id='user_profile' href="#">我的主页</a></li>
-                            <li><a id='my_strategy' href="#">我的文章</a></li>
+                            <li><a id='my_strategy' href="#">我的游记</a></li>
                             <li><a href="#">收藏</a></li>
                             <li><a href="#">关注</a></li>
                             <li class="divider"></li>
@@ -122,7 +133,7 @@
         </div>
     </nav>
     <div style="text-align:center;">
-        <h1>我的攻略</h1>
+        <h1></h1>
         <div id="strategy_div">
             <ul id="strategy_ul">
 

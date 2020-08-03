@@ -15,17 +15,56 @@ $(function(){
         },
         success: function(res){
             if(res.code==200){
+
                 $('title').text(res.data.nickname+'的个人主页')
                 $('#avatar').attr('src', '/static/media/'+res.data.avatar);
                 $('#nickname').html(res.data.nickname);
                 $('#username').html(res.data.username);
                 $('#email').html(res.data.email);
                 $('#info').html(res.data.info);
+                $('#other_span').text('Ta的游记')
                 if(res.data.username == res.data.vistor){
                     $('#change_info').css("display","inline");
+
+                    $('#change_password').css("display","inline");
                     // $('#change_info').attr("href",'/user/change_info/'+res.data.username);
                 }else{
-                    $('#wenz').html('<a href="/strategy/'+res.data.username+'">攻略列表</a>')
+                    $('#profile1').text(res.data.nickname+'的主页')
+                    $('#chccc').css("height","32px");
+                    // $('#wenz').html('<a href="/strategy/'+res.data.username+'">攻略列表</a>')
+                    $.ajax({
+                        url: 'http://127.0.0.1:8000/strategy/strategy/'+username,
+                        type: 'get',
+                        beforeSend: function(request) {
+                            request.setRequestHeader("Authorization", token);
+                        },
+                        success: function(res){
+                            if(res.code==200){
+                                $('#wenzz').css("display","inline");
+
+                                html = ''
+                                for(var i=0; i<res.data.length; i++){
+                                    id = res.data[i].id
+                                    title = res.data[i].title
+                                    comment_count = res.data[i].comment_count
+                                    create_time = res.data[i].create_time
+                                    introduce = res.data[i].introduce
+                                    browse_nums = res.data[i].browse_nums
+                                    good = res.data[i].good
+                                    html += '<li><div style="width:70%;margin-left:23%">'
+                                    html += '<div style="text-align:right"><span>浏览数：</span><span>'+browse_nums+'</span>'
+                                    html += '&nbsp&nbsp&nbsp<span>评论数：</span><span>'+comment_count+'</span>'
+                                    html += '&nbsp&nbsp&nbsp<span>good：</span><span>'+good+'</span></div>'
+                                    html += '<div style="text-align:left;padding:0px 50px 30px 50px">'
+                                    html += '<a href="/strategy/'+username+'/detail?s_id='+id+'"><h2>'+title+'</h2><p style="color:black">'+introduce+'</p></a></div>'
+                                    html += '<div style="text-align:right"><a href="/strategy/'+username+'/detail?s_id='+id+'">创建时间：'+create_time+'</span></a>'
+                                    html += '<hr></div></li>'
+                                    }
+                                $('#strategy_ul').html(html)
+                            }
+                        }
+
+                    })
                 }
             }else{
                 alert(res.error)
@@ -51,6 +90,30 @@ function change(){
     html_body +=' <span style="font-size: 20px;">info:</span><textarea id="new_info">'+$('#info').text()+'</textarea><br>'
     html_body +='<input type="button" value="保存" id="save_btn" onclick="save_info()">'
     div.html(html_body)
+}
+
+function change_password(){
+    var token = window.localStorage.getItem('travel_token');
+    var url = document.location.toString();
+    var arrUrl = url.split("//");
+    //当前访问的博客博主
+    console.log(arrUrl)
+    var username = arrUrl[1].split('/')[3];
+    $.ajax({
+        url: '/user/'+username+'/change_password',
+        type: 'get',
+        beforeSend: function(request) {
+            request.setRequestHeader("Authorization", token);
+        },
+        success: function(res){
+            if(res.code==200){
+                alert('邮件已发送')
+            }
+        }
+
+
+    })
+
 }
 
 function upload(){

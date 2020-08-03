@@ -76,6 +76,8 @@
 
         .open_reply{
             cursor:pointer;
+            background: #e8efff;
+            color:#2d64b3;
         }
 
         .reply_touser{
@@ -114,7 +116,18 @@
         }
 
     </style>
-    
+    <script>
+        function ccc(obj){
+                $(obj).addClass('act')
+            }
+
+        function ccc2(obj){
+            if($(obj).children(":first").text()=='旅游攻略'){
+                return
+            }
+            $(obj).removeClass('act')
+        }
+    </script>
 </head>
 <body>
     <nav class="navbra navbar-default" role="navigation"  style="background-color: rgba(255, 255, 255);">
@@ -126,7 +139,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a href="/index" class="navbar-brand">LIUAN</a>
+                <a href="/index" class="navbar-brand">O(∩_∩)O~~</a>
 
             </div>
             <div class="collapse navbar-collapse" id="example-navbar-collapse">
@@ -134,7 +147,7 @@
                 <ul class="nav navbar-nav" style="float:right">
                     <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="/index">首页</a></li>
                     <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="#">景点</a></li>
-                    <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="/strategy">旅游攻略</a></li>
+                    <li class="act" ><a href="/strategy/1">旅游攻略</a></li>
                     <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="/hotel/index">酒店预定</a></li>
                     <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="#">关于我们</a></li>
                     <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="#">社区</a></li>
@@ -147,7 +160,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a id='user_profile' href="#">我的主页</a></li>
-                            <li><a id='my_strategy' href="#">我的文章</a></li>
+                            <li><a id='my_strategy' href="#">我的游记</a></li>
                             <li><a href="#">收藏</a></li>
                             <li><a href="#">关注</a></li>
                             <li class="divider"></li>
@@ -168,6 +181,7 @@
         <hr>
 
         <div id="title"></div>
+        <div style="float:right;width:200px;" id="username11">作者：<a id="usernameaa"></a></div>
         <span id="time" style="display: none;"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="liulan" style="display: none;">浏览量：<span id="llcount"></span></span>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="col" style="display: none;"><a href="#">收藏</a></span>
         <hr>

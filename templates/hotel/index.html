@@ -24,6 +24,57 @@
             width:100%;
             z-index:10;
         }
+        #search_div {
+            width:436px;
+            height:100px;
+            margin:50px auto;
+            box-sizing:border-box;
+            z-index: 9;
+            position: relative;
+        }
+        .bar6 input {
+            /* border:2px solid #c5464a; */
+            box-sizing:border-box;
+            border-radius:5px;
+            background:transparent;
+            top:0;
+            right:0;
+            width:100%;
+            height:42px;
+            padding-left:13px;
+            background-color: white;
+
+        }
+        .bar6 button {
+            background:#c5464a;
+            box-sizing:border-box;
+            border-radius:0 5px 5px 0;
+            width:120px;
+            height:42px;
+            top:0;
+            right:0;
+            cursor:pointer;
+            position:absolute;
+            border:none
+        }
+        .bar6 button:before {
+            content:"搜索";
+            box-sizing:border-box;
+            font-size:15px;
+            color:#F9F0DA;
+        }
+        div.search {
+            padding:10px 0;
+            box-sizing:border-box;
+        }
+        #ff {
+            box-sizing:border-box;
+            position:relative;
+            width:437px;
+            margin:0 auto;
+        }
+
+
     </style>
     <script>
         $(function(){
@@ -52,6 +103,34 @@
 
             })
 
+
+            $('#s_btn').click(function(){
+
+                position = $('#position').val()
+                $.ajax({
+                    url: '/search?position='+position,
+                    type: 'get',
+                    success: function(res){
+                        if(res.code==200){
+                            console.log(res.data)
+                            html = ''
+                            for(let i=0;i<res.data.length; i++){
+
+                                name = res.data[i].name
+                                hotel_id = res.data[i].hotel_id
+                                position = res.data[i].position
+                                html +='<div><a href="/hotel/detail?hotel_id='+hotel_id
+                                html +='"><span style="font-size:24px">'+name+'</span></a><br>'
+                                html +='<p>'+position+'</p></div>'
+                            }
+                            $('#hotel_info').html(html)
+                        }
+
+                    }
+
+                })
+
+            })
         })
 
         function ccc(obj){
@@ -78,7 +157,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a href="/index" class="navbar-brand">LIUAN</a>
+                <a href="/index" class="navbar-brand">O(∩_∩)O~~</a>
 
             </div>
             <div class="collapse navbar-collapse" id="example-navbar-collapse">
@@ -86,7 +165,7 @@
                 <ul class="nav navbar-nav" style="float:right">
                     <li onmouseover="ccc(this)"  onmouseout="ccc2(this)"><a href="/index">首页</a></li>
                     <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"> <a href="#">景点</a></li>
-                    <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="/strategy">旅游攻略</a></li>
+                    <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="/strategy/1">旅游攻略</a></li>
                     <li class="active act" onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="/hotel/index">酒店预定</a></li>
                     <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="#">关于我们</a></li>
                     <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="#">社区</a></li>
@@ -99,7 +178,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a id='user_profile' href="#">我的主页</a></li>
-                            <li><a id='my_strategy' href="#">我的文章</a></li>
+                            <li><a id='my_strategy' href="#">我的游记</a></li>
                             <li><a href="#">收藏</a></li>
                             <li><a href="#">关注</a></li>
                             <li class="divider"></li>
@@ -111,7 +190,17 @@
             </div>
         </div>
     </nav>
-    <a href="/hotel/detail">酒店信息</a>
+    <div id="search_div">
+        <div class="search bar6">
+            <div id="ff">
+                <input type="text" placeholder="搜索目的地" id="position" style="border:1px solid #c5464a">
+                <button id="s_btn" ></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="hotel_info" style="width:60%;height:600px;margin:0 auto"></div>
+<!--    <a href="/hotel/detail">酒店信息</a>-->
 <!--    <button id="pay">打钱</button>-->
 </body>
 </html>

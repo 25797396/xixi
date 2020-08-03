@@ -1,13 +1,15 @@
 import json
-import os
 import re
+import math
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 from django.views import View
 from .models import Strategy,StrategyComment,StrategyReply,Picture,PictureType
 from user.models import User
 from django.utils.decorators import method_decorator
-from tools.tools import make_token,check_vistor,login_check
+from tools.tools import make_token,check_vistor,login_check,travel_cache
+from tools.blfilter import PyBloomFilter
+from django.core.cache import cache
 
 # 获取我的文章页
 def get_strategy_page(request, user):
@@ -19,7 +21,7 @@ def get_strategy_page(request, user):
         return render(request, 'strategy/strategy_list.html')
 
 # 攻略主页
-def get_strategyindex_page(request):
+def get_strategyindex_page(request, page_id):
     if request.method == 'GET':
         return render(request, 'strategy/index.html')
 
@@ -37,21 +39,28 @@ def get_writestrategy_page(request):
 class StrategyView(View):
 
     # 获得攻略信息
+    @method_decorator(travel_cache())
     def get(self, request, user):
         vistor = check_vistor(request)
         s_id = request.GET.get('s_id')
+
         print('获取攻略信息-------------',s_id)
         u = User.objects.get(username=user)
 
         # 判断是否是用户本人
         if vistor == user:
+            # 判断是否是获得指定攻略
             if s_id:
+                if int(s_id)<=0:
+                    return JsonResponse({'code':404})
                 strategy = Strategy.objects.filter(id=s_id, is_delete=0)
+                # 该攻略上一条数据
                 pre_strategy = Strategy.objects.filter(create_time__lt=strategy[0].create_time, userId=u,
                                                        is_delete=0).last()
+                # 该攻略下一条数据
                 next_strategy = Strategy.objects.filter(create_time__gt=strategy[0].create_time, userId=u,
                                                         is_delete=0).first()
-
+                # 判断是否存在上下条数据
                 if pre_strategy:
                     pre_strategy = {'id':pre_strategy.id, 'title':pre_strategy.title}
                 else:
@@ -69,15 +78,17 @@ class StrategyView(View):
                 data,comment_count = get_strategy_dict(strategy)
                 strategy[0].comments = int(comment_count)
                 strategy[0].save()
-                return JsonResponse({'code': 200, 'username':vistor,'data': data,
+                return JsonResponse({'code': 200, 'username':vistor,'data': data,'author':u.username,
                                      'pre_strategy':pre_strategy,
                                      'next_strategy':next_strategy,
                                      'comment_count':comment_count})
             else:
+
                 strategys = u.strategy_set.all().filter(is_delete=0)
-                data,comment_count = get_strategy_dict(strategys)
+                data = get_strategy_dict(strategys, get='all')
                 return JsonResponse({'code':200, 'username':vistor, 'data':data})
         else:
+
             if s_id:
                 strategy = Strategy.objects.filter(id=s_id, is_delete=0, strategy_type='public')
                 pre_strategy = Strategy.objects.filter(create_time__lt=strategy[0].create_time, userId=u,
@@ -102,14 +113,14 @@ class StrategyView(View):
                 data,comment_count = get_strategy_dict(strategy)
                 strategy[0].comments = int(comment_count)
                 strategy[0].save()
-                return JsonResponse({'code': 200, 'username':vistor,'data': data,
+                return JsonResponse({'code': 200, 'username':vistor,'data': data,'author':u.username,
                                      'pre_strategy':pre_strategy,
                                      'next_strategy':next_strategy,
                                      'comment_count':comment_count})
             else:
                 strategys = u.strategy_set.all().filter(strategy_type='public')
-                data,comment_count = get_strategy_dict(strategys)
-                return JsonResponse({'code': 200, 'username': vistor, 'data': data})
+                data = get_strategy_dict(strategys, get='all')
+                return JsonResponse({'code': 200, 'username': vistor, 'data': data, 'author':u.username})
 
     # 编写攻略
     @method_decorator(login_check)
@@ -121,7 +132,7 @@ class StrategyView(View):
             # 获取信息
             title = json_obj['title']
             # coverImg =
-            content_text = json_obj['content_text'][:200]
+            content_text = json_obj['content_text'][:180]
             content = json_obj['content']
             type = json_obj['type']
             # 用正则匹配出图片路径
@@ -149,6 +160,11 @@ class StrategyView(View):
                     print(e)
             print(u.username)
             res = {'code':200, }
+            # 布隆过滤器
+            bf = PyBloomFilter()
+            bf.add('travel_topic_cache_%s?s_id=%s'%(u.username,strategy.id))
+            bf.add('travel_topic_cache_/strategy/strategy/%s'%(u.username))
+            cache.delete('travel_topic_cache_/strategy/strategy/%s'%(u.username))   # 删除缓存
             return JsonResponse(res)
         except Exception as e:
             print(e)
@@ -166,6 +182,16 @@ class StrategyView(View):
 
         return JsonResponse({'code':10011,'error':'删除失败'})
 
+    # def clear_topic_caches(self, request):
+    #     all_path = request.get_full_path()
+    #     all_key_p = ['topic_cache_self', 'topic_cache']
+    #     all_keys = []
+    #     for key_p in all_key_p:
+    #         for key_h in ['','?category=tec', '?category=no-tec']:
+    #             all_keys.append(key_p+all_path+key_h)
+    #
+    #     for del_key in all_keys:
+    #         cache.delete(del_key)
 
 # 评论
 class Message(View):
@@ -184,6 +210,7 @@ class Message(View):
         # 判断是评论还是回复
         if 'comment_id' in json_obj:
             try:
+                s = Strategy.objects.get(id=s_id)
                 comment_id = int(json_obj['comment_id'].replace('comment',''))
                 user = request.myuser
                 u = User.objects.get(username=user)
@@ -208,6 +235,8 @@ class Message(View):
                     }}
                 comment.strategy.comments+=1
                 comment.strategy.save()
+                cache_key = 'travel_topic_cache_%s' % (s.userId.username+'?s_id='+s_id)
+                cache.delete(cache_key)
                 return JsonResponse(res)
             except Exception as e:
                 print(e)
@@ -225,10 +254,46 @@ class Message(View):
             res = {'code': 10012, 'error': '评论错误'}
             return JsonResponse(res)
         comment = StrategyComment.objects.create(strategy=s, content=content, user=u, good=0)
-
+        cache_key = 'travel_topic_cache_%s' % (s.userId.username + '?s_id=' + s_id)
+        cache.delete(cache_key)
         return JsonResponse({'code':200, 'data':{'username':u.username,'content':content,'avatar':str(u.avatar),
                                                  'create_time':comment.send_time.strftime("%Y-%m-%d %H:%M:%S"),
                                                  'comment_id':comment.id}})
+
+# 获得攻略主页信息
+def get_index_info(request):
+
+    page_id = request.GET.get('page_id')
+
+    # 分页查询
+    if page_id:
+        cache_key = 'strategy_index_' + page_id
+        page_id = int(page_id)
+        if page_id>100:
+            return HttpResponse(404)
+
+        res = cache.get(cache_key)
+        res_sum_page = cache.get('sum_page')
+        if res_sum_page:
+            sum_page = res_sum_page
+        else:
+            sum_page = math.ceil(Strategy.objects.count()/5)
+            cache.set('sum_page',sum_page)
+        if res:
+            print('---有攻略主页缓存，返回缓存---')
+            return res
+        else:
+            print('---无攻略主页缓存，查数据库，并存缓存---')
+            strategys = Strategy.objects.filter(is_delete=0)[5 * (page_id - 1):5 * page_id]
+            if strategys:
+                data = get_strategy_dict(strategys, get='all')
+                res = JsonResponse({'code': 200, 'data': data, 'sum_page': sum_page, 'current_page':page_id})
+                cache.set(cache_key, res, 60)
+                return res
+            else:
+                cache.set(cache_key, res, 30)
+                return HttpResponse(404)
+
 
 # 上传攻略图片
 def upload(request):
@@ -248,9 +313,38 @@ def upload(request):
     return JsonResponse({"errno":0,"data":['/static/media/'+str(p.picture_path)]})
 
 # 生成攻略数据字典
-def get_strategy_dict(strategys):
+def get_strategy_dict(strategys, get='one'):
     data = []
-    for strategy in strategys:
+    # 多个攻略
+    if len(strategys)>1 and get=='all':
+        for strategy in strategys:
+            id = strategy.id
+            title = strategy.title
+            author = strategy.userId.username
+            avatar = str(strategy.userId.avatar)
+            # content = strategy.content
+            browse_nums = strategy.browse_nums
+            collection = strategy.collection
+            good = strategy.good
+            introduce = strategy.introduce
+            create_time = strategy.create_time
+            comments = strategy.strategycomment_set.all()
+            comment_count = strategy.strategycomment_set.count()
+            if comments:
+                for comment in comments:
+                    reply_count = comment.strategycomment_id.count()
+                    comment_count += reply_count
+            data.append(
+                {'id': id, 'title': title, 'create_time': create_time.strftime("%Y-%m-%d %H:%M:%S"),
+                 'browse_nums': browse_nums, 'collection': collection, 'good': good, 'comment_count': comment_count,
+                 'introduce':introduce,'author':author, 'avatar':avatar
+                 })
+
+        return data
+
+    # 指定攻略
+    else:
+        strategy = strategys[0]
         id = strategy.id
         title = strategy.title
         content = strategy.content
@@ -311,3 +405,4 @@ def get_reply_dict(replys):
                       'r_comment':r_comment,'r_good':r_good,'r_touser': r_touser})
 
     return data
+

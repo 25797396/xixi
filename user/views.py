@@ -5,17 +5,19 @@ from django.conf import settings
 from django.views import View
 from django.utils.decorators import method_decorator
 from tools.tools import make_token,check_vistor,login_check,del_img
-from django.db.models import Q,Max
+from django.db.models import Q
 from .models import User
 from strategy.models import Strategy
 from hotel.models import Hotel
 from scenic.models import Scenic
 from tools.sms import YunTongXin
+from .tasks import sendMail,sendSms
 import hashlib
 import jwt
 import json
 import random
 import os
+import re
 
 # 主页
 def index(request):
@@ -52,6 +54,9 @@ def register(request):
         password = json_obj['password']
         password2 = json_obj['password2']
         email = json_obj['email']
+        r_email = '^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$'
+        if not re.search(r_email,email):
+            return JsonResponse({'code':10266, 'error': '邮箱格式错误'})
         phone = json_obj['phone']
         info = ''
         sms_num = int(json_obj['code'])
@@ -186,8 +191,23 @@ class UserInfo(View):
 # 搜索
 def search(request):
     search_content = request.GET.get('search_content')
-
+    position = request.GET.get('position')
     data = {}
+    if position:
+        # 查找目的地酒店
+        hotels = Hotel.objects.filter(cityname__contains=position)
+        data = []
+        if hotels:
+            for hotel in hotels:
+                hotel_id = hotel.id
+                name = hotel.name
+                cover_img = str(hotel.cover_img)
+                price = hotel.price
+                city = hotel.cityname
+                position = hotel.position
+                data.append({'hotel_id':hotel_id, 'name':name, 'cover_img':cover_img, 'price': price, 'position':position,
+                             'city':city})
+        return JsonResponse({'code':200, 'data':data})
     # 用户
     users = User.objects.filter(username__icontains=search_content)
     if users:
@@ -211,10 +231,17 @@ def search(request):
 
         data['strategys'] = s
     # 酒店
-    hotels = Hotel.objects.filter(Q(name__icontains=search_content)|Q(position__contains=search_content))
+    hotels = Hotel.objects.filter(position__contains=search_content)
     if hotels:
+        h = []
         for hotel in hotels:
-            pass
+            name = hotel.name
+            cover_img = str(hotel.cover_img)
+            position = hotel.position
+            price = hotel.price
+            h.append({'name': name, 'cover_img': cover_img, 'position': position, 'price': price})
+        data['hotel'] = h
+
 
     # 风景
     scenics = Scenic.objects.filter(name__icontains=search_content)
@@ -227,6 +254,7 @@ def search(request):
 # 推荐
 def recommend(request, choice='all'):
 
+    # 攻略
     strategys = Strategy.objects.filter(is_delete=0, strategy_type='public').order_by('-browse_nums','-comments')[:4]
     s = []
     for strategy in strategys:
@@ -307,9 +335,18 @@ def sms_view(request):
     # print('---send result is %s'%(res))
 
     # 异步 -- celery
-    # send_sms.delay(phone, code)
+    # sendSms.delay(phone, code)
 
     # 测试使用
     print('---验证码为 %s' % (code))
-
     return JsonResponse({'code':200,})
+
+# 修改密码
+@login_check
+def change_password(request, user):
+    user = check_vistor(request)
+    email = User.objects.filter(username=user)[0].email
+    print(email)
+    # sendMail.delay('1281516386@qq.com')
+    sendMail.delay(email)
+    return JsonResponse({'code':200})

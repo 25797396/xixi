@@ -27,12 +27,32 @@
     </style>
     <script>
         $(function(){
-            if($("input[name='h']:checked").length!=0){
-                $('#price').html(Number($("input[name='h']:checked").val())*129)
-            }
+            var hotel_id = window.location.href.replace('http://127.0.0.1:8000/hotel/detail?hotel_id=','')
+            console.log(hotel_id)
+            $.ajax({
+                url: '/hotel/info?hotel_id='+hotel_id,
+                type: 'get',
+                success: function(res){
+                    if(res.code==200){
+                        name = res.data.name
+                        position = res.data.position
+                        var price = res.data.price
+
+                        $('#hotel_name').text(name)
+                        $('#price').text(price)
+                        $('#position').text(position)
+                    }
+                }
+
+            })
+
+<!--            if($("input[name='h']:checked").length!=0){-->
+<!--                $('#price').html(Number($("input[name='h']:checked").val())*price)-->
+<!--            }-->
             $('#pay').click(function(){
                 var day = $("input[name='h']:checked").val()
-                price = day*129
+                p = $('#price').text()
+                var hotel_name = $('#hotel_name').text()
                 var token = window.localStorage.getItem('travel_token');
                 var username = window.localStorage.getItem('travel_user');
                 var timestamp = (new Date()).getTime();
@@ -40,13 +60,13 @@
                 $.ajax({
                     url: 'http://127.0.0.1:8000/hotel/order/'+username,
                     type: 'post',
-                    data: JSON.stringify({"order_id":order_id,"hotel_name":"如家", "days":day, "price":129*Number(day)}),
+                    data: JSON.stringify({"order_id":order_id,"hotel_name":hotel_name, "days":day, "price":p*Number(day)}),
                     beforeSend: function(request) {
                         request.setRequestHeader("Authorization", token);
                     },
                     success: function(data){
                         if(data.code==200){
-                        window.location = data.pay_url
+                            window.location = data.pay_url
                         }else{
                             alert(data.error)
                         }
@@ -69,11 +89,11 @@
             $(obj).removeClass('act')
         }
 
-        function onC(obj){
-            if(obj.checked){
-                $('#price').html(Number(obj.value)*129)
-            }
-        }
+<!--        function onC(obj){-->
+<!--            if(obj.checked){-->
+<!--                $('#price').html(Number(obj.value)*price)-->
+<!--            }-->
+<!--        }-->
 
     </script>
 </head>
@@ -87,7 +107,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a href="/index" class="navbar-brand">LIUAN</a>
+                <a href="/index" class="navbar-brand">O(∩_∩)O~~</a>
 
             </div>
             <div class="collapse navbar-collapse" id="example-navbar-collapse">
@@ -95,7 +115,7 @@
                 <ul class="nav navbar-nav" style="float:right">
                     <li onmouseover="ccc(this)"  onmouseout="ccc2(this)"><a href="/index">首页</a></li>
                     <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"> <a href="#">景点</a></li>
-                    <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="/strategy">旅游攻略</a></li>
+                    <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="/strategy/1">旅游攻略</a></li>
                     <li class="active act" onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="/hotel/index">酒店预定</a></li>
                     <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="#">关于我们</a></li>
                     <li onmouseover="ccc(this)"   onmouseout="ccc2(this)"><a href="#">社区</a></li>
@@ -108,7 +128,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a id='user_profile' href="#">我的主页</a></li>
-                            <li><a id='my_strategy' href="#">我的文章</a></li>
+                            <li><a id='my_strategy' href="#">我的游记</a></li>
                             <li><a href="#">收藏</a></li>
                             <li><a href="#">关注</a></li>
                             <li class="divider"></li>
@@ -121,8 +141,8 @@
         </div>
     </nav>
     <div style="width:50%;margin:0 auto">
-        <p>酒店名：xx酒店</p>
-
+        酒店名：<span id="hotel_name"></span><br>
+        位置:<span id="position"></span><br>
         入住天数：<input type="radio" name="h" checked="checked" onclick="onC(this)" value="1">1天
         <input type="radio" name="h" onclick="onC(this)" value="2">2天
         <input type="radio" name="h" onclick="onC(this)" value="3">3天<br>

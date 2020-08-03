@@ -7,6 +7,7 @@ urlpatterns = [
     path('/<str:user>/detail', views.get_detail_page),
     path('/upload', views.upload),
     path('/<str:user>/message', views.Message.as_view()),
-    path('', views.get_strategyindex_page),
+    path('/get_info', views.get_index_info),
+    path('/<int:page_id>', views.get_strategyindex_page),
     path('/<str:user>', views.get_strategy_page),
 ]

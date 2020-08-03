@@ -107,6 +107,7 @@ class HotelOrderView(View):
         return JsonResponse({'code':200, 'pay_url': pay_url})
 
 
+# 支付宝相关
 class ResultView(MyAliPay):
     def get(self, request):
         # return url 支付完毕后 支付宝将用户重定向到该地址
